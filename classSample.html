@@ -1,62 +1,54 @@
 <html>
-<head>
-  <meta charset="utf-8"/>
-  <!-- JSライブラリを読み込む. このファイルを読み込むと初めてThree.jsが利用できるようになる-->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/105/three.min.js"></script>
-  <script>
-    //ページの読み込みを待つ
-    window.addEventListener('load', init);
-    //ページの読み込みが終わったら実行させたい関数（init()）を指定  
-    function init() {
-
-      // レンダラーのサイズを指定
-      const width = 960;
-      const height = 540;
-
-      // レンダラーを作成
-      const renderer = new THREE.WebGLRenderer({
-        canvas: document.querySelector('#myCanvas')
-      });
-      renderer.setPixelRatio(window.devicePixelRatio);
-      renderer.setSize(width, height);
-
-      // シーンを作成(3D空間のこと. 3Dオブジェクトや光源などの置き場)
-      const scene = new THREE.Scene();
-
-      // カメラを作成(どの視点から空間を撮影するか)
-      const camera = new THREE.PerspectiveCamera(45, width / height);
-      camera.position.set(-100, 150, 500);
-      camera.lookAt(new THREE.Vector3(0,0,0));
-      //geometry…形状のこと,頂点情報や面情報を持つ
-      const mesh = new Donuts();
-      //3Dのオブジェクトはシーンにadd()メソッドを利用して追加することで表示
-      scene.add(mesh);
-
-      //初回実行
-      tick();
-
-      // 毎フレーム時に実行されるループイベント
-      function tick() {
-        mesh.rotation.y += 0.02;
-        mesh.rotation.x += 0.01;
-        renderer.render(scene, camera); // レンダリング
-
-        requestAnimationFrame(tick);
-      }
-    }
-
-    class Donuts extends THREE.Mesh {
-        constructor() {
-            const geometry = new THREE.TorusGeometry(120, 40, 60, 50);
-            const material = new THREE.MeshNormalMaterial();
-
-            super(geometry, materiarl);
+  <head>
+    <meta charset="utf-8" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/105/three.min.js"></script>
+    <script>
+      // ページの読み込みを待つ
+      window.addEventListener('load', init);
+      function init() {
+        // サイズを指定
+        const width = 960;
+        const height = 540;
+        // レンダラーを作成
+        const renderer = new THREE.WebGLRenderer({
+          canvas: document.querySelector('#myCanvas')
+        });
+        renderer.setPixelRatio(window.devicePixelRatio);
+        renderer.setSize(width, height);
+        // シーンを作成
+        const scene = new THREE.Scene();
+        // カメラを作成
+        const camera = new THREE.PerspectiveCamera(45, width / height);
+        camera.position.set(-100, 150, 500);
+        camera.lookAt(new THREE.Vector3(0, 0, 0));
+        // ドーナツを作る
+        const mesh = new Donuts();
+        scene.add(mesh);
+        tick();
+        // 毎フレーム時に実行されるループイベントです
+        function tick() {
+          mesh.rotation.x += 0.02;
+          mesh.rotation.y += 0.01;
+          // レンダリング
+          renderer.render(scene, camera);
+          requestAnimationFrame(tick);
         }
-    }
-  </script>
-</head>
-<body>
-    <!-- bodyにcanvasタグを入れることでコンテンツを描写する-->
-  <canvas id="myCanvas"></canvas>
-</body>
+      }
+      /** メッシュを継承したドーナツクラスです。 */
+      class Donuts extends THREE.Mesh {
+        /** コンストラクターです。 */
+        constructor() {
+          // ジオメトリを作成
+          const geometry = new THREE.TorusGeometry(120, 40, 60, 50);
+          // マテリアルを作成
+          const material = new THREE.MeshNormalMaterial();
+          // 継承元のコンストラクターを実行
+          super(geometry, material);
+        }
+      }
+    </script>
+  </head>
+  <body>
+    <canvas id="myCanvas"></canvas>
+  </body>
 </html>
